@@ -35,4 +35,8 @@ app.use('/api/cameras', cameraRoutes);
 app.use('/api/teddies', teddyRoutes);
 app.use('/api/furniture', furnitureRoutes);
 
+app.get('/', function(request, response){
+    response.sendFile('/index.html', {root: "/home/jackolantern/Bureau/Projet5/JWDP5"});
+});
+
 module.exports = app;
