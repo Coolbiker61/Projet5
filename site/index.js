@@ -31,7 +31,7 @@ const importProduit = () => {
 					if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
 						localStorage.furniture = this.responseText;
 					} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
-						console.log("erreur d'importation du produit meuble en chene");
+						console.log("erreur d'importation du produit meuble en chêne");
 					}
 				}
 				urlApi = "http://localhost:3000/api/furniture";
@@ -45,29 +45,29 @@ const importProduit = () => {
 	} 
 	
 }
-importProduit();
 const afficheProduit = () => {
+	/* récupère les produits stocké dans le localStorage et les affiches sur la page*/
 	let compteur = 0;
 	let html = "";
 	for (let produit of listeProduits) {
 		const elements = JSON.parse(localStorage.getItem(produit));
 		if (elements != null) {
-			
+			html += "<div class=\"categorie\"><span class=\"titre-cate\">";
 			switch (produit) {
 				case "cameras":
-					html += "<div class=\"categorie\"> Nos appareils photos";
+					html += "Nos appareils photos";
 					break;
 				case "teddies":
-					html += "<div class=\"categorie\"> Nos ours en pelluche";
+					html += "Nos ours en peluche";
 					break;
 				case "furniture":
-					html += "<div class=\"categorie\"> Nos meubles en chênes";
+					html += "Nos meubles en chênes";
 					break;
 				default:
 					console.log('erreur produit inconnus');
 					break;
 			}
-			
+			html += "</span>";
 			for (var article of elements) {
 				let image = article.imageUrl;
 				let nom = article.name;
@@ -76,12 +76,12 @@ const afficheProduit = () => {
 				let description = article.description;
 				let id = article._id;
 
-				html += "<div class=\"objet\" id=\""+id+"\">";
+				html += "<a href=\"./produit.html\" id=\""+id+"\"><div class=\"objet\">";
 				html += "<h3>"+nom+"</h3>";
 				html += "<img class=\"img-produit\" src=\""+image+"\">";
 				html += "<p>"+description+"</p>";
 				html += "<div>Prix : "+prix+"€</div>";
-				html += "</div>";
+				html += "</div></a>";
 			}
 			html += "</div>";
 			compteur++;
@@ -91,10 +91,10 @@ const afficheProduit = () => {
 					console.log("Extraction impossible des appareils photos du localstorage");
 					break;
 				case "teddies":
-					console.log("Extraction impossible des ours en pelluche du localstorage"); 
+					console.log("Extraction impossible des ours en peluche du localstorage"); 
 					break;
 				case "furniture":
-					console.log("Extraction impossible des meuble en chene du localstorage");
+					console.log("Extraction impossible des meuble en chêne du localstorage");
 				default:
 					console.log('erreur produit inconnus');
 					break;
@@ -105,4 +105,14 @@ const afficheProduit = () => {
 		document.getElementById("produits").innerHTML = html;
 	}
 } 
+/* Importations des articles */
+importProduit();
+/* Affichage des articles sous formes de liste */
 afficheProduit();
+let elements = document.querySelectorAll("#produits a");
+for(var lien of elements){
+	lien.addEventListener("click", function (event){
+		localStorage.article = lien.id;
+		event.stopPropagation();
+	})
+}

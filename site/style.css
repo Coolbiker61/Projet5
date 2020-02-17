@@ -428,6 +428,12 @@ h1{
 	margin: 20px 3vw;
 	border: 3px solid #7F72B6;
 }
+.titre-cate{
+	font-size: 25px;
+	margin: 20px;
+	display: block;
+	text-decoration: underline;
+}
 .img-produit{
 	width: 95%;
 	border: 1px solid #9C7693;
