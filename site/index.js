@@ -1,8 +1,7 @@
+const listeProduits = ["cameras", "teddies", "furniture"];
 
 const importProduit = () => {
-	const listeProduits = ["cameras", "teddies", "furniture"]
-
-	
+		
 	for (let produit of listeProduits) {
 		var requete = new XMLHttpRequest();
 		let urlApi = "";
@@ -41,7 +40,6 @@ const importProduit = () => {
 				console.log("Produit inconnu");
 				break;
 		}
-		
 		requete.open("GET", urlApi);
 		requete.send();
 	} 
@@ -49,28 +47,62 @@ const importProduit = () => {
 }
 importProduit();
 const afficheProduit = () => {
+	let compteur = 0;
+	let html = "";
+	for (let produit of listeProduits) {
+		const elements = JSON.parse(localStorage.getItem(produit));
+		if (elements != null) {
+			
+			switch (produit) {
+				case "cameras":
+					html += "<div class=\"categorie\"> Nos appareils photos";
+					break;
+				case "teddies":
+					html += "<div class=\"categorie\"> Nos ours en pelluche";
+					break;
+				case "furniture":
+					html += "<div class=\"categorie\"> Nos meubles en chênes";
+					break;
+				default:
+					console.log('erreur produit inconnus');
+					break;
+			}
+			
+			for (var article of elements) {
+				let image = article.imageUrl;
+				let nom = article.name;
+				let prix = article.price;
+				prix /= 100;
+				let description = article.description;
+				let id = article._id;
 
-	const cameras = JSON.parse(localStorage.getItem("cameras"));
-	if (cameras != null) {
-		let html = "";
-		html = "<div class=\"categorie\"> Nos caméras </div>";
-		for (var article of cameras) {
-			let image = article.imageUrl;
-			let nom = article.name;
-			let prix = article.price;
-			let description = article.description;
-			let id = article._id;
-
-			html += "<div class=\"objet\" id=\""+id+"\">";
-			html += "<img class=\"img-produit\" src=\""+image+"\">";
-			html += "<h3>"+nom+"</h3>";
-			html += "<div>"+prix+"</div>";
-			html += "<p>"+description+"</p>";
+				html += "<div class=\"objet\" id=\""+id+"\">";
+				html += "<h3>"+nom+"</h3>";
+				html += "<img class=\"img-produit\" src=\""+image+"\">";
+				html += "<p>"+description+"</p>";
+				html += "<div>Prix : "+prix+"€</div>";
+				html += "</div>";
+			}
 			html += "</div>";
+			compteur++;
+		} else {
+			switch (produit) {
+				case "cameras":
+					console.log("Extraction impossible des appareils photos du localstorage");
+					break;
+				case "teddies":
+					console.log("Extraction impossible des ours en pelluche du localstorage"); 
+					break;
+				case "furniture":
+					console.log("Extraction impossible des meuble en chene du localstorage");
+				default:
+					console.log('erreur produit inconnus');
+					break;
+			}
 		}
+	}
+	if (compteur == 3) {
 		document.getElementById("produits").innerHTML = html;
-	} else {
-		console.log("Extraction impossible des cameras du localstorage");
 	}
 } 
 afficheProduit();
