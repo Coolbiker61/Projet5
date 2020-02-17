@@ -49,6 +49,28 @@ const importProduit = () => {
 }
 importProduit();
 const afficheProduit = () => {
-	
-} 
 
+	const cameras = JSON.parse(localStorage.getItem("cameras"));
+	if (cameras != null) {
+		let html = "";
+		html = "<div class=\"categorie\"> Nos caméras </div>";
+		for (var article of cameras) {
+			let image = article.imageUrl;
+			let nom = article.name;
+			let prix = article.price;
+			let description = article.description;
+			let id = article._id;
+
+			html += "<div class=\"objet\" id=\""+id+"\">";
+			html += "<img class=\"img-produit\" src=\""+image+"\">";
+			html += "<h3>"+nom+"</h3>";
+			html += "<div>"+prix+"</div>";
+			html += "<p>"+description+"</p>";
+			html += "</div>";
+		}
+		document.getElementById("produits").innerHTML = html;
+	} else {
+		console.log("Extraction impossible des cameras du localstorage");
+	}
+} 
+afficheProduit();
