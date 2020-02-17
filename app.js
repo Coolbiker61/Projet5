@@ -19,7 +19,7 @@ mongoose.connect(
     console.log('Unable to connect to MongoDB Atlas!');
     console.error(error);
   });
-
+  
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -34,9 +34,6 @@ app.use(bodyParser.json());
 app.use('/api/cameras', cameraRoutes);
 app.use('/api/teddies', teddyRoutes);
 app.use('/api/furniture', furnitureRoutes);
-
-app.get('/', function(request, response){
-    response.sendFile('/index.html', {root: "/home/jackolantern/Bureau/Projet5/JWDP5"});
-});
+app.use(express.static('site'));
 
 module.exports = app;

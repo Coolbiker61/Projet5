@@ -1,5 +1,5 @@
 
-const importProduit = () {
+const importProduit () = {
 	var requete = new new XMLHttpRequest();
 	requete.onreadystatechange = function () {
 		if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
