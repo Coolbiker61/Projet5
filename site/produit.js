@@ -1,4 +1,5 @@
 const Produit = {
+	personalisation: "",
 	id: "",
 	name: "",
 	price: "",
