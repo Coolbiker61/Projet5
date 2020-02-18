@@ -443,7 +443,7 @@ h1{
 	border: 3px solid #8B3C31;
 	padding: 10px 5px;
 }
-.objet div{
+.prix{
 	font-size: 22px;
 	font-weight: 600;
 	margin: 10px;
@@ -452,6 +452,10 @@ h3{
 	font-size: 25px;
 	margin: 10px;
 }
+p, h3, .prix, select{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
 p{
-	margin: 10px auto;
+	width: 95%
 }

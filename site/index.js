@@ -1,4 +1,5 @@
 const listeProduits = ["cameras", "teddies", "furniture"];
+let listeIdArticles = [];
 
 const importProduit = () => {
 		
@@ -11,7 +12,7 @@ const importProduit = () => {
 					if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
 						localStorage.cameras = this.responseText;
 					} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
-						console.log("erreur d'importation du produit cameras vintages");
+						console.error("erreur d'importation du produit cameras vintages");
 					}
 				}
 				urlApi = "http://localhost:3000/api/cameras";
@@ -21,7 +22,7 @@ const importProduit = () => {
 					if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
 						localStorage.teddies = this.responseText;
 					} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
-						console.log("erreur d'importation du produit ours en peluche");
+						console.error("erreur d'importation du produit ours en peluche");
 					}
 				}
 				urlApi = "http://localhost:3000/api/teddies";
@@ -31,13 +32,13 @@ const importProduit = () => {
 					if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
 						localStorage.furniture = this.responseText;
 					} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
-						console.log("erreur d'importation du produit meuble en chêne");
+						console.error("erreur d'importation du produit meuble en chêne");
 					}
 				}
 				urlApi = "http://localhost:3000/api/furniture";
 				break;
 			default:
-				console.log("Produit inconnu");
+				console.error("Produit inconnu");
 				break;
 		}
 		requete.open("GET", urlApi);
@@ -64,7 +65,7 @@ const afficheProduit = () => {
 					html += "Nos meubles en chênes";
 					break;
 				default:
-					console.log('erreur produit inconnus');
+					console.error('erreur produit inconnus');
 					break;
 			}
 			html += "</span>";
@@ -75,12 +76,13 @@ const afficheProduit = () => {
 				prix /= 100;
 				let description = article.description;
 				let id = article._id;
+				listeIdArticles.push(id);
 
 				html += "<a href=\"./produit.html\" id=\""+id+"\"><div class=\"objet\">";
 				html += "<h3>"+nom+"</h3>";
 				html += "<img class=\"img-produit\" src=\""+image+"\">";
-				html += "<p>"+description+"</p>";
-				html += "<div>Prix : "+prix+"€</div>";
+				/*html += "<p>"+description+"</p>";
+				html += "<div class=\"prix\">Prix : "+prix+"€</div>";*/
 				html += "</div></a>";
 			}
 			html += "</div>";
@@ -88,15 +90,15 @@ const afficheProduit = () => {
 		} else {
 			switch (produit) {
 				case "cameras":
-					console.log("Extraction impossible des appareils photos du localstorage");
+					console.error("Extraction impossible des appareils photos du localstorage");
 					break;
 				case "teddies":
-					console.log("Extraction impossible des ours en peluche du localstorage"); 
+					console.error("Extraction impossible des ours en peluche du localstorage"); 
 					break;
 				case "furniture":
-					console.log("Extraction impossible des meuble en chêne du localstorage");
+					console.error("Extraction impossible des meuble en chêne du localstorage");
 				default:
-					console.log('erreur produit inconnus');
+					console.error('erreur produit inconnus');
 					break;
 			}
 		}
@@ -105,14 +107,22 @@ const afficheProduit = () => {
 		document.getElementById("produits").innerHTML = html;
 	}
 } 
+/* lors d'un clic la fonction */
+actionsClick = (event) => {
+	var identifiant = event.target.parentElement.parentElement.getAttribute('id');
+	event.stopPropagation();
+	if (listeIdArticles.includes(identifiant)) {
+		localStorage.article = identifiant;
+	} else {
+		console.error("l'id n'appartient a aucun des articles !! ");
+	}
+}
+
 /* Importations des articles */
 importProduit();
 /* Affichage des articles sous formes de liste */
 afficheProduit();
-let elements = document.querySelectorAll("#produits a");
-for(var lien of elements){
-	lien.addEventListener("click", function (event){
-		localStorage.article = lien.id;
-		event.stopPropagation();
-	})
+/* surveille le click sur les differents produits */
+for(var id of listeIdArticles){
+	document.getElementById(id).addEventListener("click", actionsClick.bind(event));
 }
