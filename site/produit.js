@@ -31,7 +31,7 @@ const afficheProduit = (idArticle) => {
 							console.error("erreur recuperation des ameliorations");
 							break;
 					}
-					html += "<div class=\"objet\">";
+					html += "<div class=\"objet\"  id=\""+id+"\">";
 					html += "<h3>"+nom+"</h3>";
 					html += "<img class=\"img-produit\" src=\""+image+"\"><br>";
 					html += "<label for=\"amelioration\">Options : </label>";
@@ -43,7 +43,7 @@ const afficheProduit = (idArticle) => {
 					html += "</select>";
 					html += "<p>"+description+"</p>";
 					html += "<div class=\"prix\">Prix : "+prix+"€</div>";
-					html += "<button class=\"bouton\" id=\""+id+"\" type=\"button\">Ajouter au panier</button>";
+					html += "<button class=\"bouton\" id=\"bouton\" type=\"button\">Ajouter au panier</button>";
 					html += "</div>";
 				}
 			}
@@ -70,20 +70,26 @@ const afficheProduit = (idArticle) => {
 
 
 afficheProduit(idArticleSelectionne);
-document.getElementsByClassName("bouton").addEventListener("click", function (event) {
-	let identifiant = document.getElementsByClassName("bouton").getAttribute('id');
+document.getElementById("bouton").addEventListener("click", function (event) {
+	let identifiant = document.getElementById("bouton").parentElement.getAttribute('id');
+	var panier;
 	if (localStorage.panier) {
-		var panier = JSON.parse(localStorage.panier);
-		if (panier.isArray()) {
+		if (/\s/.test(localStorage.getItem("panier"))) {
+    		panier = JSON.parse(localStorage.getItem("panier"));
+		} else {
+			panier = localStorage.getItem("panier");
+		}
+		
+		if (Array.isArray(panier)) {
 			panier.push(identifiant);
 		} else {
 			let panierTemporaire = [panier, identifiant];
 			panier = panierTemporaire;
 		}
 	} else {
-		var panier = identifiant; 
+		panier = identifiant; 
 	}
-	localStorage.panier = panier;
+	localStorage.setItem("panier", JSON.stringify(panier));
 	console.log(panier);
 });
 
