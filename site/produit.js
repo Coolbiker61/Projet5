@@ -65,8 +65,13 @@ const afficheProduit = (idArticle) => {
 	}
 	document.getElementById("article").innerHTML = html;
 } 
-
-
+/* supprime les " et le \ */
+let retire = (chaine) => {
+	chaine = chaine.substring(1);
+	let position = chaine.indexOf('"');
+	chaine = chaine.substring(0, (position));
+	return chaine;
+}
 
 
 afficheProduit(idArticleSelectionne);
@@ -74,17 +79,27 @@ document.getElementById("bouton").addEventListener("click", function (event) {
 	let identifiant = document.getElementById("bouton").parentElement.getAttribute('id');
 	var panier;
 	if (localStorage.panier) {
-		if (/\s/.test(localStorage.getItem("panier"))) {
+		if (/\,/.test(localStorage.getItem("panier"))) {
     		panier = JSON.parse(localStorage.getItem("panier"));
 		} else {
 			panier = localStorage.getItem("panier");
+			panier = retire(panier);
 		}
-		
+			
 		if (Array.isArray(panier)) {
-			panier.push(identifiant);
+			if (panier.find(element => element == identifiant)) {
+				return 0;
+			} else {
+				panier.push(identifiant);
+			}
 		} else {
-			let panierTemporaire = [panier, identifiant];
-			panier = panierTemporaire;
+			if (panier != identifiant) {
+				let panierTemporaire = [panier, identifiant];
+				panier = panierTemporaire;
+			} else {
+				return 0;
+			}
+			
 		}
 	} else {
 		panier = identifiant; 
