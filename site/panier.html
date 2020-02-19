@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="./style.css">
 		<link rel="shortcut icon" href="img/favicon.ico" />
+        <script type="text/javascript" src="./panier.js" defer></script>
 		
 		<title>Panier - Oricono</title>
 	</head>
@@ -18,8 +19,22 @@
 		<header>
 			<h1>Votre panier</h1>
 		</header>
+		<section class="contenu">
+		</section>
 		<section>
-			<article></article>
+			<form  class="contact">
+				<label for="nom">Nom : </label>
+				<input type="text" name="nom" required>
+				<label for="prenom">Prenom : </label>
+				<input type="text" name="prenom" required>
+				<label for="adresse">Adresse : </label>
+				<input type="text" name="adresse" required>
+				<label for="ville">Ville : </label>
+				<input type="text" name="ville" required>
+				<label for="email">Adresse éléctronique : </label>
+				<input type="email" name="email" required>
+				<button>Valider votre commande</button>
+			</form>
 		</section>
 	</body>
 </html>

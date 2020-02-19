@@ -459,3 +459,15 @@ p, h3, .prix, select{
 p{
 	width: 95%
 }
+
+.contact{
+	display: -webkit-box;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	        flex-direction: column;
+}
+.vide{
+	text-align: center;
+	font-size: 25px;
+}
