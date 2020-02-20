@@ -77,32 +77,20 @@ afficheProduit(idArticleSelectionne);
 
 document.getElementById("bouton").addEventListener("click", function (event) {
 	let identifiant = document.getElementById("bouton").parentElement.getAttribute('id');
-	var panier;
+	var panier = [];
 	if (localStorage.panier) {
-		if (/\,/.test(localStorage.getItem("panier"))) {
+		if (/\[/.test(localStorage.getItem("panier"))) {
     		panier = JSON.parse(localStorage.getItem("panier"));
-		} else {
-			panier = localStorage.getItem("panier");
-			panier = retire(panier);
-		}
-			
+		}			
 		if (Array.isArray(panier)) {
 			if (panier.find(element => element == identifiant)) {
 				return 0;
 			} else {
 				panier.push(identifiant);
 			}
-		} else {
-			if (panier != identifiant) {
-				let panierTemporaire = [panier, identifiant];
-				panier = panierTemporaire;
-			} else {
-				return 0;
-			}
-			
 		}
 	} else {
-		panier = identifiant; 
+		panier = [identifiant]; 
 	}
 	localStorage.setItem("panier", JSON.stringify(panier));
 });
