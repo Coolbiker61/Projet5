@@ -471,3 +471,13 @@ p{
 	text-align: center;
 	font-size: 25px;
 }
+.details-panier{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+.img-panier{
+    width: 95%;
+    border: 1px solid #9C7693;
+    max-width: 350px;
+}

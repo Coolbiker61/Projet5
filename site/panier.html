@@ -19,20 +19,20 @@
 		<header>
 			<h1>Votre panier</h1>
 		</header>
-		<section class="contenu">
+		<section id="contenu">
 		</section>
 		<section>
 			<form  class="contact">
 				<label for="nom">Nom : </label>
-				<input type="text" name="nom" required>
+				<input type="text" name="nom" required size="40" pattern="(?=.*[a-z])(?=.*[A-Z]).{3,}">
 				<label for="prenom">Prenom : </label>
-				<input type="text" name="prenom" required>
+				<input type="text" name="prenom" required size="40" pattern="(?=.*[a-z])(?=.*[A-Z]).{3,}">
 				<label for="adresse">Adresse : </label>
-				<input type="text" name="adresse" required>
+				<input type="text" name="adresse" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
 				<label for="ville">Ville : </label>
-				<input type="text" name="ville" required>
+				<input type="text" name="ville" required pattern="(?=.*[a-z])(?=.*[A-Z]).{2,}">
 				<label for="email">Adresse éléctronique : </label>
-				<input type="email" name="email" required>
+				<input type="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
 				<button>Valider votre commande</button>
 			</form>
 		</section>

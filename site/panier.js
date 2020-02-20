@@ -50,15 +50,16 @@ const affichePanier = () => {
 								let image = article.imageUrl;
 								let nom = article.name;
 								let prix = article.price;
+								prixTotal += prix;
 								prix /= 100;
 								let id = article._id;
 								
 								html += "<div class=\"objet\"  id=\""+id+"\">";
-								html += "<h3>"+nom+"</h3>";
-								html += "<img class=\"img-produit\" src=\""+image+"\"><br>";
+								html += "<img class=\"img-panier\" src=\""+image+"\">";
+								html += "<div class=\"details-panier\"><h3>"+nom+"</h3>";
 								html += "<div class=\"prix\">Prix : "+prix+"€</div>";
-								html += "<button class=\"bouton\" id=\"bouton\" type=\"button\">Ajouter au panier</button>";
-								html += "</div>";
+								html += "<a class=\"bouton\" id=\"bouton\" type=\"button\">Supprimer du panier</a>";
+								html += "</div></div>";
 							}
 						}						
 					} else {
@@ -66,15 +67,16 @@ const affichePanier = () => {
 							let image = article.imageUrl;
 							let nom = article.name;
 							let prix = article.price;
+							prixTotal += prix;
 							prix /= 100;
 							let id = article._id;
 							
 							html += "<div class=\"objet\"  id=\""+id+"\">";
-							html += "<h3>"+nom+"</h3>";
-							html += "<img class=\"img-produit\" src=\""+image+"\"><br>";
+							html += "<img class=\"img-panier\" src=\""+image+"\">";
+							html += "<div class=\"details-panier\"><h3>"+nom+"</h3>";
 							html += "<div class=\"prix\">Prix : "+prix+"€</div>";
-							html += "<button class=\"bouton\" id=\"bouton\" type=\"button\">Ajouter au panier</button>";
-							html += "</div>";
+							html += "<a class=\"bouton\" id=\"bouton\" type=\"button\">Supprimer du panier</a>";
+							html += "</div></div>";
 						}
 					}
 				}
@@ -82,6 +84,7 @@ const affichePanier = () => {
 				afficherErreur(produit);
 			}
 		}
+		html += "<div class\"total\" id=\"total\">Total : "+(prixTotal/100)+"€";
 	} else {
 		html += "<div class=\"vide\">Votre panier est vide</div>"
 	}
@@ -89,5 +92,32 @@ const affichePanier = () => {
 	
 	document.getElementById("contenu").innerHTML = html;
 } 
+
+const supprimerArticlePanier = (id) => {
+	var panier;
+	if (localStorage.panier) {
+		if (/\,/.test(localStorage.getItem("panier"))) {
+    		panier = JSON.parse(localStorage.getItem("panier"));
+		} else {
+			panier = localStorage.getItem("panier");
+			panier = retire(panier);
+		}
+			
+		if (Array.isArray(panier)) {
+			if (panier.indexOf(id)) {
+				panier.splice(panier.indexOf(id), 1);
+			} else {
+				/* erreur */
+			}
+		} else {
+			localStorage.removeItem(panier);
+		}
+	}
+}
+
+
+
+
+
 affichePanier();
 

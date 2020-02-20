@@ -105,6 +105,5 @@ document.getElementById("bouton").addEventListener("click", function (event) {
 		panier = identifiant; 
 	}
 	localStorage.setItem("panier", JSON.stringify(panier));
-	console.log(panier);
 });
 
