@@ -73,8 +73,8 @@ let retire = (chaine) => {
 	return chaine;
 }
 
-
 afficheProduit(idArticleSelectionne);
+
 document.getElementById("bouton").addEventListener("click", function (event) {
 	let identifiant = document.getElementById("bouton").parentElement.getAttribute('id');
 	var panier;

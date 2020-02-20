@@ -108,7 +108,7 @@ const afficheProduit = () => {
 	}
 } 
 /* lors d'un clic la fonction */
-actionsClick = (event) => {
+const actionsClick = (event) => {
 	var identifiant = event.target.parentElement.parentElement.getAttribute('id');
 	event.stopPropagation();
 	if (listeIdArticles.includes(identifiant)) {

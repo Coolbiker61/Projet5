@@ -26,19 +26,35 @@ let retire = (chaine) => {
 	chaine = chaine.substring(0, (position));
 	return chaine;
 }
+
+const controlePanier = () => {
+	var panier;
+	panier = localStorage.getItem("panier");
+	/* verification de l'abscence de valeur vide et suppression de celle ci */
+	while (panier.indexOf("\"\",") != -1) {
+		panier = panier.replace("\"\",", '');
+		localStorage.setItem("panier", panier);
+	}
+	while (panier.indexOf(",\"\"") != -1) {
+		panier = panier.replace(",\"\"", '');
+		localStorage.setItem("panier", panier);
+	}
+}
+
+
 const affichePanier = () => {
 	/* récupère les produits stocké dans le localStorage et affiche sur la page ceux dans le panier*/
 	let html = "";
 	var panier;
 	let prixTotal = 0;
 	if (localStorage.panier) {
-		if (/\,/.test(localStorage.getItem("panier"))) {
-    		panier = JSON.parse(localStorage.getItem("panier"));
+		controlePanier();
+		if (/\,/.test(localStorage.getItem("panier")) || /\[/.test(localStorage.getItem("panier"))) {
+			panier = JSON.parse(localStorage.getItem("panier"));
 		} else {
 			panier = localStorage.getItem("panier");
 			panier = retire(panier);
 		}	
-		
 		
 		for (let produit of listeProduits) {
 			const elements = JSON.parse(localStorage.getItem(produit));
@@ -93,10 +109,11 @@ const affichePanier = () => {
 	document.getElementById("contenu").innerHTML = html;
 } 
 
-const supprimerArticlePanier = (id) => {
+const supprimerArticlePanier = (event) => {
+	var identifiant = event.target.parentElement.parentElement.getAttribute('id');
 	var panier;
 	if (localStorage.panier) {
-		if (/\,/.test(localStorage.getItem("panier"))) {
+		if (/\,/.test(localStorage.getItem("panier")) || /\[/.test(localStorage.getItem("panier"))) {
     		panier = JSON.parse(localStorage.getItem("panier"));
 		} else {
 			panier = localStorage.getItem("panier");
@@ -104,20 +121,53 @@ const supprimerArticlePanier = (id) => {
 		}
 			
 		if (Array.isArray(panier)) {
-			if (panier.indexOf(id)) {
-				panier.splice(panier.indexOf(id), 1);
+			if (panier.indexOf(identifiant)) {
+				panier.splice(panier.indexOf(identifiant), 1);
+				if (panier.length == 1) {
+					panier = panier.toString();
+				} else if (panier.length == 0) {
+					localStorage.removeItem(panier);
+					console.log("suppression du panier");
+					return 0;
+				} else {
+					localStorage.setItem("panier", JSON.stringify(panier));
+				}
 			} else {
-				/* erreur */
+				console.error("suppression impossible, produit absent du panier");
 			}
 		} else {
 			localStorage.removeItem(panier);
 		}
 	}
+	/* suppression de l'article dans la html */
+	while (document.getElementById(identifiant).firstChild) {
+	   document.getElementById(identifiant).removeChild(document.getElementById(identifiant).firstChild);
+	}
+	document.getElementById(identifiant).remove();
+}
+
+const surveillanceArticlePanier = () => {
+	if (localStorage.getItem("panier")) {
+		if (/\,/.test(localStorage.getItem("panier")) || /\[/.test(localStorage.getItem("panier"))) {
+			panier = JSON.parse(localStorage.getItem("panier"));
+			console.log(panier);
+			for(var id of panier){
+				console.log(id);
+				document.getElementById(id).addEventListener("click", supprimerArticlePanier.bind(event));
+			}
+		} else if (localStorage.getItem("panier")) {
+			panier = localStorage.getItem("panier");
+			panier = retire(panier);
+			document.getElementById(panier).addEventListener("click", supprimerArticlePanier(event));
+		} else {
+			return 0;
+		}
+	} else {
+		return 0;
+	}
 }
 
 
-
-
-
 affichePanier();
-
+surveillanceArticlePanier();
+console.log(localStorage.getItem("panier"));
