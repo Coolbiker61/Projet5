@@ -1,22 +1,4 @@
-const listeProduits = ["cameras", "teddies", "furniture"];
-
-
-const afficherErreur = (contenu) => {
-	switch (contenu) {
-			case "cameras":
-				console.error("Extraction impossible l'appareils photos du localstorage");
-				break;
-			case "teddies":
-				console.error("Extraction impossible l'ours en peluche du localstorage"); 
-				break;
-			case "furniture":
-				console.error("Extraction impossible le meuble en chêne du localstorage");
-			default:
-				console.error('erreur produit inconnus');
-				break;
-		}
-}
-
+let prixTotal; /* contiendra le prix total des articles */
 const controlePanier = () => {
 	var panier = [];
 	panier = localStorage.getItem("panier");
@@ -36,15 +18,13 @@ const affichePanier = () => {
 	/* récupère les produits stocké dans le localStorage et affiche sur la page ceux dans le panier*/
 	let html = "";
 	var panier = [];
-	let prixTotal = 0;
+	prixTotal = 0;
 	if (localStorage.panier) {
 		controlePanier();
 		if (/\[/.test(localStorage.getItem("panier"))) {
 			panier = JSON.parse(localStorage.getItem("panier"));
 		}	
-		
-		for (let produit of listeProduits) {
-			const elements = JSON.parse(localStorage.getItem(produit));
+			const elements = JSON.parse(localStorage.getItem("cameras"));
 			if (elements != null) {	
 				for (var article of elements) {
 					if (Array.isArray(panier)) {
@@ -70,9 +50,8 @@ const affichePanier = () => {
 					}
 				}
 			} else {
-				afficherErreur(produit);
+				console.error("Extraction impossible l'appareils photos du localstorage");
 			}
-		}
 		html += "<div class\"total\" id=\"total\">Total : "+(prixTotal/100)+"€";
 	} else {
 		html += "<div class=\"vide\">Votre panier est vide</div>"
@@ -125,8 +104,7 @@ const surveillanceArticlePanier = () => {
 		return 0;
 	}
 }
-/* tableau envoyer : tableau de strings intitulé "product_id"
-retourne aussi un objet "contact" */
+/* executer apres clique sur le bouton valider */
 const validationFormulaire = (event) => {
 	event.stopPropagation();
 	event.preventDefault();
@@ -135,32 +113,40 @@ const validationFormulaire = (event) => {
 		return;
 	} else {
 		const contact = {
-			nom: document.getElementById("nom").value,
-			prenom: document.getElementById("prenom").value,
-			adresse: document.getElementById("adresse").value,
-			ville: document.getElementById("ville").value,
+			firstName: document.getElementById("prenom").value,
+			lastName: document.getElementById("nom").value,
+			address: document.getElementById("adresse").value,
+			city: document.getElementById("ville").value,
 			email: document.getElementById("email").value
 		}
-		
-		var codeCommande;
+		const panier = JSON.parse(localStorage.getItem("panier"));
+		var data = {
+			contact: contact,
+			products: panier
+		};
+		data = JSON.stringify(data);
 		var requete = new XMLHttpRequest();
 		requete.onreadystatechange = function () {
-			if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
-				codeCommande = this.responseText;
-			} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
-				console.error("erreur d'importation du produit");
+			if (this.readyState == XMLHttpRequest.DONE && this.status == 201 ) {
+				localStorage.setItem("retourCommande", this.responseText);
+			} else if (this.readyState == XMLHttpRequest.DONE && this.status != 201) {
+				console.error("erreur d'evoie du panier");
 			}
 		};
-		requete.open("POST", urlApi);
-		requete.send();
+		requete.open("POST", "http://localhost:3000/api/cameras/order");
+		requete.setRequestHeader("Content-Type", "application/json");
+		requete.responseType = 'text';
+		requete.send(data);
 		/*window.location.href = "./confirm.html";*/
+		/* tableau envoyer : tableau de strings intitulé "product_id"
+retourne aussi un objet "contact" */
 	}
 }
-
+/* affiche le contenu du panier */
 affichePanier();
+/* surveillance des lignes supprimer des articles du panier */
 surveillanceArticlePanier();
-
-
+/* surveillance du bouton valider du formulaire */
 document.getElementById("valider-panier").addEventListener("click", function (event) {
  	validationFormulaire(event);
 });

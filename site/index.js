@@ -1,111 +1,49 @@
-const listeProduits = ["cameras", "teddies", "furniture"];
 let listeIdArticles = [];
 
+/* importe les articles dans le localstorage si il n'y sont pas déjà */
 const importProduit = () => {
-		
-	for (let produit of listeProduits) {
+	if (localStorage.getItem("cameras")) {
+		return;
+	} else {
 		var requete = new XMLHttpRequest();
-		let urlApi = "";
-		switch (produit) {
-			case "cameras":
-				requete.onreadystatechange = function () {
-					if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
-						localStorage.cameras = this.responseText;
-					} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
-						console.error("erreur d'importation du produit cameras vintages");
-					}
-				}
-				urlApi = "http://localhost:3000/api/cameras";
-				break;
-			case "teddies":
-				requete.onreadystatechange = function () {
-					if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
-						localStorage.teddies = this.responseText;
-					} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
-						console.error("erreur d'importation du produit ours en peluche");
-					}
-				}
-				urlApi = "http://localhost:3000/api/teddies";
-				break;
-			case "furniture":
-				requete.onreadystatechange = function () {
-					if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
-						localStorage.furniture = this.responseText;
-					} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
-						console.error("erreur d'importation du produit meuble en chêne");
-					}
-				}
-				urlApi = "http://localhost:3000/api/furniture";
-				break;
-			default:
-				console.error("Produit inconnu");
-				break;
+		requete.onreadystatechange = function () {
+			if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
+				localStorage.setItem("cameras") = this.responseText;
+			} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
+				console.error("erreur d'importation du produit cameras vintages");
+			}
 		}
-		requete.open("GET", urlApi);
+		requete.open("GET", "http://localhost:3000/api/cameras");
 		requete.send();
-	} 
-	
+	}
 }
 const afficheProduit = () => {
 	/* récupère les produits stocké dans le localStorage et les affiches sur la page*/
-	let compteur = 0;
 	let html = "";
-	for (let produit of listeProduits) {
-		const elements = JSON.parse(localStorage.getItem(produit));
-		if (elements != null) {
-			html += "<div class=\"categorie\"><span class=\"titre-cate\">";
-			switch (produit) {
-				case "cameras":
-					html += "Nos appareils photos";
-					break;
-				case "teddies":
-					html += "Nos ours en peluche";
-					break;
-				case "furniture":
-					html += "Nos meubles en chênes";
-					break;
-				default:
-					console.error('erreur produit inconnus');
-					break;
-			}
-			html += "</span>";
-			for (var article of elements) {
-				let image = article.imageUrl;
-				let nom = article.name;
-				let prix = article.price;
-				prix /= 100;
-				let description = article.description;
-				let id = article._id;
-				listeIdArticles.push(id);
+	const elements = JSON.parse(localStorage.getItem("cameras"));
+	if (elements != null) {
+		html += "<div class=\"categorie\"><span class=\"titre-cate\">";
+		html += "Nos appareils photos";
+		html += "</span>";
+		for (var article of elements) {
+			let image = article.imageUrl;
+			let nom = article.name;
+			let prix = article.price;
+			prix /= 100;
+			let description = article.description;
+			let id = article._id;
+			listeIdArticles.push(id);
 
-				html += "<a href=\"./produit.html\" id=\""+id+"\"><div class=\"objet\">";
-				html += "<h3>"+nom+"</h3>";
-				html += "<img class=\"img-produit\" src=\""+image+"\">";
-				/*html += "<p>"+description+"</p>";
-				html += "<div class=\"prix\">Prix : "+prix+"€</div>";*/
-				html += "</div></a>";
-			}
-			html += "</div>";
-			compteur++;
-		} else {
-			switch (produit) {
-				case "cameras":
-					console.error("Extraction impossible des appareils photos du localstorage");
-					break;
-				case "teddies":
-					console.error("Extraction impossible des ours en peluche du localstorage"); 
-					break;
-				case "furniture":
-					console.error("Extraction impossible des meuble en chêne du localstorage");
-				default:
-					console.error('erreur produit inconnus');
-					break;
-			}
+			html += "<a href=\"./produit.html\" id=\""+id+"\"><div class=\"objet\">";
+			html += "<img class=\"img-produit\" src=\""+image+"\">";
+			html += "<h3>"+nom+"</h3>";
+			html += "</div></a>";
 		}
+		html += "</div>";
+	} else {
+		console.error("Extraction impossible des appareils photos du localstorage");
 	}
-	if (compteur == 3) {
-		document.getElementById("produits").innerHTML = html;
-	}
+	document.getElementById("produits").innerHTML = html;
 } 
 /* lors d'un clic la fonction */
 const actionsClick = (event) => {

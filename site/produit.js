@@ -1,83 +1,51 @@
-const listeProduits = ["cameras", "teddies", "furniture"];
-/* recupere l'article cliqué sur la page d'index qui est stocké dans le localStorage */
-const idArticleSelectionne = localStorage.article;
+
 
 const afficheProduit = (idArticle) => {
 	/* récupère les produits stocké dans le localStorage et affiche sur la page celui selctionné sur l'index*/
 	let html = "";
-	for (let produit of listeProduits) {
-		const elements = JSON.parse(localStorage.getItem(produit));
-		if (elements != null) {	
-			for (var article of elements) {
-				if(article._id == idArticle) {
-					let image = article.imageUrl;
-					let nom = article.name;
-					let amelioration = "";
-					let prix = article.price;
-					prix /= 100;
-					let description = article.description;
-					let id = article._id;
-					switch (produit) {
-						case "cameras":
-							amelioration = article.lenses;
-							break;
-						case "teddies":
-							amelioration = article.colors;
-							break;
-						case "furniture":
-							amelioration = article.varnish;
-							break;
-						default:
-							console.error("erreur recuperation des ameliorations");
-							break;
-					}
-					html += "<div class=\"objet\"  id=\""+id+"\">";
-					html += "<h3>"+nom+"</h3>";
-					html += "<img class=\"img-produit\" src=\""+image+"\"><br>";
-					html += "<label for=\"amelioration\">Options : </label>";
-					html += "<select name=\"amelioration\" id=\"amelioration\">";
-					for (let option of amelioration) {
-						html += "<option value=\""+option+"\">"+option+"</option>";
-					}
-    				
-					html += "</select>";
-					html += "<p>"+description+"</p>";
-					html += "<div class=\"prix\">Prix : "+prix+"€</div>";
-					html += "<button class=\"bouton\" id=\"bouton\" type=\"button\">Ajouter au panier</button>";
-					html += "</div>";
+	const elements = JSON.parse(localStorage.getItem("cameras"));
+	if (elements != null) {	
+		for (var article of elements) {
+			if(article._id == idArticle) {
+				let image = article.imageUrl;
+				let nom = article.name;
+				let amelioration = article.lenses;
+				let prix = article.price;
+				prix /= 100;
+				let description = article.description;
+				let id = article._id;
+				
+				html += "<div class=\"objet\"  id=\""+id+"\">";
+				html += "<img class=\"img-produit\" src=\""+image+"\">";
+				html += "<h3>"+nom+"</h3>";
+				html += "<label for=\"lentilles\">lentilles : </label>";
+				html += "<select name=\"lentilles\" id=\"lentilles\">";
+				for (let option of amelioration) {
+					html += "<option value=\""+option+"\">"+option+"</option>";
 				}
-			}
-		} else {
-			switch (produit) {
-				case "cameras":
-					console.error("Extraction impossible l'appareils photos du localstorage");
-					break;
-				case "teddies":
-					console.error("Extraction impossible l'ours en peluche du localstorage"); 
-					break;
-				case "furniture":
-					console.error("Extraction impossible le meuble en chêne du localstorage");
-				default:
-					console.error('erreur produit inconnus');
-					break;
+				
+				html += "</select>";
+				html += "<p>"+description+"</p>";
+				html += "<div class=\"prix\">Prix : "+prix+"€</div>";
+				html += "<button class=\"bouton\" id=\"bouton\" type=\"button\">Ajouter au panier</button>";
+				html += "</div>";
 			}
 		}
+	} else {
+		console.error("Extraction impossible l'appareils photos du localstorage");
 	}
 	document.getElementById("article").innerHTML = html;
 } 
-/* supprime les " et le \ */
-let retire = (chaine) => {
-	chaine = chaine.substring(1);
-	let position = chaine.indexOf('"');
-	chaine = chaine.substring(0, (position));
-	return chaine;
-}
 
+/* recupere l'article cliqué sur la page d'index qui est stocké dans le localStorage */
+const idArticleSelectionne = localStorage.article;
+/* affiche la fiche de l'article */
 afficheProduit(idArticleSelectionne);
-
+/* surveillance du clic sur le bonton ajouté au panier et gestion du cas ou il y est deja present */
 document.getElementById("bouton").addEventListener("click", function (event) {
 	let identifiant = document.getElementById("bouton").parentElement.getAttribute('id');
 	var panier = [];
+	document.getElementById("bouton").disabled = true;
 	if (localStorage.panier) {
 		if (/\[/.test(localStorage.getItem("panier"))) {
     		panier = JSON.parse(localStorage.getItem("panier"));
