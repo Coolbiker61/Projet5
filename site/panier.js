@@ -119,8 +119,7 @@ const surveillanceArticlePanier = () => {
 		if (/\[/.test(localStorage.getItem("panier"))) {
 			contenuPanier = JSON.parse(localStorage.getItem("panier"));
 			for(var id of contenuPanier){
-console.log(document.getElementById("bouton"+id));
-				document.getElementById("bouton"+id).addEventListener("click", supprimerArticlePanier.bind(event));
+				document.getElementById("bouton"+id).addEventListener("click", supprimerArticlePanier.bind(event), once);
 			}
 		} else {
 			return 0;
@@ -130,7 +129,23 @@ console.log(document.getElementById("bouton"+id));
 	}
 }
 
+const validationFormulaire = (event) => {
+	if (event) {
+		event.stopPropagation();
+		event.preventDefault();
+		if (localStorage.getItem("panier") == null) {
+			alert("Vous ne pouvez valider un panier vide !")
+			return;
+		}
+		const nom = document.getElementById("nom").getAttribute("value");
+		const prenom = document.getElementById("prenom").getAttribute("value");
+		const adresse = document.getElementById("adresse").getAttribute("value");
+		const ville = document.getElementById("ville").getAttribute("value");
+		const email = document.getElementById("email").getAttribute("value");
+	}
+}
 
-console.log(localStorage.getItem("panier"));
+document.getElementById("valider-panier").addEventListener("click", validationFormulaire(event));
+
 affichePanier();
 surveillanceArticlePanier();
