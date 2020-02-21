@@ -84,6 +84,7 @@ document.getElementById("bouton").addEventListener("click", function (event) {
 		}			
 		if (Array.isArray(panier)) {
 			if (panier.find(element => element == identifiant)) {
+				alert("Cet article est déjà dans votre panier.");
 				return 0;
 			} else {
 				panier.push(identifiant);

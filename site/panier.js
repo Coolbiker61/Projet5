@@ -1,6 +1,3 @@
-/* tableau envoyer : tableau de strings intitulé "product_id"
-retourne aussi un objet "contact" */
-
 const listeProduits = ["cameras", "teddies", "furniture"];
 
 
@@ -119,7 +116,7 @@ const surveillanceArticlePanier = () => {
 		if (/\[/.test(localStorage.getItem("panier"))) {
 			contenuPanier = JSON.parse(localStorage.getItem("panier"));
 			for(var id of contenuPanier){
-				document.getElementById("bouton"+id).addEventListener("click", supprimerArticlePanier.bind(event), once);
+				document.getElementById("bouton"+id).addEventListener("click", supprimerArticlePanier.bind(event));
 			}
 		} else {
 			return 0;
@@ -128,24 +125,45 @@ const surveillanceArticlePanier = () => {
 		return 0;
 	}
 }
-
+/* tableau envoyer : tableau de strings intitulé "product_id"
+retourne aussi un objet "contact" */
 const validationFormulaire = (event) => {
-	if (event) {
-		event.stopPropagation();
-		event.preventDefault();
-		if (localStorage.getItem("panier") == null) {
-			alert("Vous ne pouvez valider un panier vide !")
-			return;
+	event.stopPropagation();
+	event.preventDefault();
+	if (localStorage.getItem("panier") == null) {
+		alert("Vous ne pouvez valider un panier vide !");
+		return;
+	} else {
+		const contact = {
+			nom: document.getElementById("nom").value,
+			prenom: document.getElementById("prenom").value,
+			adresse: document.getElementById("adresse").value,
+			ville: document.getElementById("ville").value,
+			email: document.getElementById("email").value
 		}
-		const nom = document.getElementById("nom").getAttribute("value");
-		const prenom = document.getElementById("prenom").getAttribute("value");
-		const adresse = document.getElementById("adresse").getAttribute("value");
-		const ville = document.getElementById("ville").getAttribute("value");
-		const email = document.getElementById("email").getAttribute("value");
+		
+		var codeCommande;
+		var requete = new XMLHttpRequest();
+		requete.onreadystatechange = function () {
+			if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
+				codeCommande = this.responseText;
+			} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
+				console.error("erreur d'importation du produit");
+			}
+		};
+		requete.open("POST", urlApi);
+		requete.send();
+		/*window.location.href = "./confirm.html";*/
 	}
 }
 
-document.getElementById("valider-panier").addEventListener("click", validationFormulaire(event));
-
 affichePanier();
 surveillanceArticlePanier();
+
+
+document.getElementById("valider-panier").addEventListener("click", function (event) {
+ 	validationFormulaire(event);
+});
+
+
+
