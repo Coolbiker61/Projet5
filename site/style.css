@@ -365,6 +365,8 @@ textarea {
 body{
 	text-align: center;
 	background-color: #f3e9f1;
+    font-size: 20px;
+    padding-bottom: 50px;
 }
 .entreprise{
 	font-family: 'belligerent_madnessregular';
@@ -387,25 +389,17 @@ li{
 	list-style-type: none;
 	font-size: 25px;
 }
-.accueil{
-	display: -webkit-box;
-	display: flex;
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
-	        flex-direction: row;
-	-webkit-box-pack: center;
-	        justify-content: center;
+header{
+	justify-content: center;
 	padding: 60px 0;
 }
 h1{
 	font-size: 45px;
-	margin-left:  10px;
 }
 .entete{
 	font-size: 30px;
 }
 #produits{
-	font-size : 20px;
 	display: -webkit-box;
 	display: flex;
 	-webkit-box-orient: vertical;
@@ -438,6 +432,10 @@ h1{
 	font-weight: 600;
 	margin: 10px;
 }
+h2{
+    font-weight: 700;
+    font-size: 22px;
+}
 h3{
 	font-size: 25px;
 	margin: 10px;
@@ -447,15 +445,21 @@ p, h3, .prix, select{
 	margin-bottom: 10px;
 }
 p{
-	width: 95%
+	width: 95%;
 }
-
+.total{
+	font-weight: 700;
+	font-size: 22px;
+}
 .contact{
 	display: -webkit-box;
 	display: flex;
 	-webkit-box-orient: vertical;
 	-webkit-box-direction: normal;
 	        flex-direction: column;
+}
+label, button{
+	margin-top: 10px;
 }
 .vide{
 	text-align: center;
@@ -473,4 +477,15 @@ p{
     width: 95%;
     border: 1px solid #9C7693;
     max-width: 350px;
+}
+#commande-coordonnées, .contact{
+	background-color: #C6E5FA;
+	margin: 10px;
+	padding: 10px;
+}
+.titre-contact{
+	font-weight: 700;
+}
+#contenu{
+	margin-bottom: 20px;
 }

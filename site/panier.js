@@ -52,7 +52,7 @@ const affichePanier = () => {
 			} else {
 				console.error("Extraction impossible l'appareils photos du localstorage");
 			}
-		html += "<div class\"total\" id=\"total\">Total : "+(prixTotal/100)+"€";
+		html += "<div class=\"total\" id=\"total\">Total du panier : "+(prixTotal/100)+"€";
 	} else {
 		html += "<div class=\"vide\">Votre panier est vide</div>"
 	}

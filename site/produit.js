@@ -1,4 +1,4 @@
-
+/* !!! necesite un test de presence dans le panier pour grisé le boutton si deja present*/
 
 const afficheProduit = (idArticle) => {
 	/* récupère les produits stocké dans le localStorage et affiche sur la page celui selctionné sur l'index*/
