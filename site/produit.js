@@ -22,12 +22,17 @@ const afficheProduit = (idArticle) => {
 				html += "<select name=\"lentilles\" id=\"lentilles\">";
 				for (let option of amelioration) {
 					html += "<option value=\""+option+"\">"+option+"</option>";
-				}
-				
+				}				
 				html += "</select>";
 				html += "<p>"+description+"</p>";
 				html += "<div class=\"prix\">Prix : "+prix+"€</div>";
-				html += "<button class=\"bouton\" id=\"bouton\" type=\"button\">Ajouter au panier</button>";
+				html += "<button class=\"bouton\" id=\"bouton\" type=\"button\"";
+				if (JSON.parse(localStorage.getItem("panier")).includes(id)) {
+					html += "disabled >Ajouter au panier</button><br /> <span class=\"deja-panier\">"
+					html += "Cet article est déjà dans votre panier</span>"
+				} else {
+					html += ">Ajouter au panier</button>";
+				}
 				html += "</div>";
 			}
 		}
