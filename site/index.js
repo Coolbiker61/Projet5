@@ -1,7 +1,8 @@
 let listeIdArticles = [];
 
-/* importe les articles dans le localstorage si il n'y sont pas déjà */
+/* importe les articles depuis l'api vers le localstorage si il n'y sont pas déjà */
 const importProduit = () => {
+	/* controle la presence de cameras dans le localStorage et stop la fonction si present */
 	if (localStorage.getItem("cameras")) {
 		return;
 	} else {
@@ -20,7 +21,15 @@ const importProduit = () => {
 const afficheProduit = () => {
 	/* récupère les produits stocké dans le localStorage et les affiches sur la page*/
 	let html = "";
-	const elements = JSON.parse(localStorage.getItem("cameras"));
+	var elements;
+	/* test de l'existance de cameras dans le localStorage*/
+	if (localStorage.getItem("cameras")) {
+		elements = JSON.parse(localStorage.getItem("cameras"));
+	} else {
+		console.error("chargement des cameras impossible");
+		return;
+	}
+	
 	if (elements != null) {
 		html += "<div class=\"categorie\"><span class=\"titre-cate\">";
 		html += "Nos appareils photos";
@@ -47,13 +56,18 @@ const afficheProduit = () => {
 } 
 /* lors d'un clic la fonction */
 const actionsClick = (event) => {
-	var identifiant = event.target.parentElement.parentElement.getAttribute('id');
-	event.stopPropagation();
-	if (listeIdArticles.includes(identifiant)) {
-		localStorage.article = identifiant;
+	if (event.target.parentElement.parentElement.getAttribute('id')) {
+		var identifiant = event.target.parentElement.parentElement.getAttribute('id');
+		event.stopPropagation();
+		if (listeIdArticles.includes(identifiant)) {
+			localStorage.article = identifiant;
+		} else {
+			console.error("l'id n'appartient a aucun des articles !! ");
+		}
 	} else {
-		console.error("l'id n'appartient a aucun des articles !! ");
+		console.error("recupration de l'id impossible");
 	}
+	
 }
 
 /* Importations des articles */
