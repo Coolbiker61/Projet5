@@ -37,11 +37,11 @@ const affichePanier = () => {
 								prix /= 100;
 								let id = article._id;
 								
-								html += "<div class=\"objet\"  id=\""+id+"\">";
+								html += "<div class=\"objet panier\"  id=\""+id+"\">";
 								html += "<img class=\"img-panier\" src=\""+image+"\">";
 								html += "<div class=\"details-panier\"><h3>"+nom+"</h3>";
 								html += "<div class=\"prix\">Prix : "+prix+"€</div>";
-								html += "<a class=\"bouton\" id=\"bouton"+id+"\" type=\"button\">Supprimer du panier</a>";
+								html += "<a class=\"bouton\" id=\"bouton"+id+"\" type=\"button\"><img src=\"./img/croix.svg\" class=\"img-supprimer\">Supprimer du panier</a>";
 								html += "</div></div>";
 							}
 						}						

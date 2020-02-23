@@ -29,7 +29,7 @@ const afficheProduit = () => {
 		console.error("chargement des cameras impossible");
 		return;
 	}
-	
+	/* ajoute tout les articles au html*/
 	if (elements != null) {
 		html += "<div class=\"categorie\"><span class=\"titre-cate\">";
 		html += "Nos appareils photos";
@@ -54,7 +54,7 @@ const afficheProduit = () => {
 	}
 	document.getElementById("produits").innerHTML = html;
 } 
-/* lors d'un clic la fonction */
+/* action lors d'un clic */
 const actionsClick = (event) => {
 	if (event.target.parentElement.parentElement.getAttribute('id')) {
 		var identifiant = event.target.parentElement.parentElement.getAttribute('id');

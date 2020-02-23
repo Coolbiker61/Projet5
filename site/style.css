@@ -465,6 +465,11 @@ label, button{
 	text-align: center;
 	font-size: 25px;
 }
+.panier{
+	display: flex;
+	align-items: center;
+	padding: 0 5px;
+}
 .details-panier{
     display: -webkit-box;
     display: flex;
@@ -472,11 +477,13 @@ label, button{
     -webkit-box-direction: normal;
             flex-direction: column;
     margin: 10px;
+    width: 55%;
 }
 .img-panier{
-    width: 95%;
+    width: 45%;
+    height: 45%;
     border: 1px solid #9C7693;
-    max-width: 350px;
+    margin: 10px 0;
 }
 #commande-coordonnées, .contact{
 	background-color: #C6E5FA;
@@ -488,4 +495,7 @@ label, button{
 }
 #contenu{
 	margin-bottom: 20px;
+}
+.img-supprimer{
+	width: 20px;
 }
