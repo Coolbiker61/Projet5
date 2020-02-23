@@ -390,7 +390,8 @@ li{
 	font-size: 25px;
 }
 header{
-	justify-content: center;
+	-webkit-box-pack: center;
+	        justify-content: center;
 	padding: 60px 0;
 }
 h1{
@@ -426,6 +427,13 @@ h1{
 	margin: 5px 2%;
 	border: 3px solid #8B3C31;
 	padding: 10px 5px;
+	display: -webkit-box;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	        flex-direction: column;
+	-webkit-box-align: center;
+	        align-items: center;
 }
 .prix{
 	font-size: 22px;
@@ -496,6 +504,42 @@ label, button{
 #contenu{
 	margin-bottom: 20px;
 }
-.img-supprimer{
+.detail-article{
+	display: -webkit-box;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	        flex-direction: column;
+	padding-bottom: 20px;
+}
+#lentilles{
+	display: inline-block;
+	padding: 5px;
+	margin: auto;
+	width: 200px;
+}
+#bouton{
+	width: 184px;
+	background-color: #ADCB8E;
+	padding: 10px;
+	border-radius: 10px;
+	margin: auto;
+}
+#deja-panier{
+	margin-top: 10px;
+	color: red;
+}
+
+
+
+/* debut media query */
+@media screen and (min-width: 768px)
+{
+	.objet{
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		        flex-direction: row;
+	}
+}.img-supprimer{
 	width: 20px;
 }

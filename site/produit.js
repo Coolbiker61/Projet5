@@ -18,7 +18,7 @@ const afficheProduit = (idArticle) => {
 				
 				html += "<div class=\"objet\"  id=\""+id+"\">";
 				html += "<img class=\"img-produit\" src=\""+image+"\">";
-				html += "<h3>"+nom+"</h3>";
+				html += "<div class=\"detail-article\" ><h3>"+nom+"</h3>";
 				html += "<label for=\"lentilles\">lentilles : </label>";
 				html += "<select name=\"lentilles\" id=\"lentilles\">";
 				for (let option of amelioration) {
@@ -28,8 +28,8 @@ const afficheProduit = (idArticle) => {
 				html += "<p>"+description+"</p>";
 				html += "<div class=\"prix\">Prix : "+prix+"€</div>";
 				html += "<button class=\"bouton\" id=\"bouton\" type=\"button\"";
-				html += ">Ajouter au panier</button><br /> <span id=\"deja-panier\"></span>";
-				html += "</div>";
+				html += ">Ajouter au panier</button><span id=\"deja-panier\"></span>";
+				html += "</div></div>";
 				document.getElementById("article").innerHTML = html;
 				/* controle la presence de l'article dans le panier */
 				controlPresencePanier(id);
@@ -55,7 +55,7 @@ const idArticleSelectionne = localStorage.article;
 afficheProduit(idArticleSelectionne);
 /* surveillance du clic sur le bonton ajouté au panier et gestion du cas ou il y est deja present */
 document.getElementById("bouton").addEventListener("click", function (event) {
-	let identifiant = document.getElementById("bouton").parentElement.getAttribute('id');
+	let identifiant = document.getElementById("bouton").parentElement.parentElement.getAttribute('id');
 	var panier = [];
 	document.getElementById("bouton").disabled = true;
 	if (localStorage.panier) {
