@@ -474,8 +474,10 @@ label, button{
 	font-size: 25px;
 }
 .panier{
+	display: -webkit-box;
 	display: flex;
-	align-items: center;
+	-webkit-box-align: center;
+	        align-items: center;
 	padding: 0 5px;
 }
 .details-panier{
@@ -511,6 +513,9 @@ label, button{
 	-webkit-box-direction: normal;
 	        flex-direction: column;
 	padding-bottom: 20px;
+}
+.img-supprimer{
+	width: 20px;
 }
 #lentilles{
 	display: inline-block;
