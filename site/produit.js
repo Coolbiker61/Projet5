@@ -17,7 +17,7 @@ const afficheProduit = (idArticle) => {
 				let id = article._id;
 				
 				html += "<div class=\"objet\"  id=\""+id+"\">";
-				html += "<img class=\"img-produit\" src=\""+image+"\">";
+				html += "<img class=\"img-produit img-article\" src=\""+image+"\">";
 				html += "<div class=\"detail-article\" ><h3>"+nom+"</h3>";
 				html += "<label for=\"lentilles\">lentilles : </label>";
 				html += "<select name=\"lentilles\" id=\"lentilles\">";

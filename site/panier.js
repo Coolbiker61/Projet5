@@ -107,7 +107,14 @@ const surveillanceArticlePanier = () => {
 /* executer apres clique sur le bouton valider */
 const validationFormulaire = (event) => {
 	event.stopPropagation();
-	event.preventDefault();
+	/*event.preventDefault();*/
+	/* personalise le message d'erreur du champ
+	if(email.validity.typeMismatch) {
+    email.setCustomValidity("J'attend un e-mail, mon cher !");
+  } else {
+    email.setCustomValidity("");
+  }  https://developer.mozilla.org/fr/docs/Web/Guide/HTML/Formulaires/Validation_donnees_formulaire
+  */
 	if (localStorage.getItem("panier") == null) {
 		alert("Vous ne pouvez valider un panier vide !");
 		return;
