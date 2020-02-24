@@ -144,9 +144,7 @@ const validationFormulaire = (event) => {
 		requete.setRequestHeader("Content-Type", "application/json");
 		requete.responseType = 'text';
 		requete.send(data);
-		/*window.location.href = "./confirm.html";*/
-		/* tableau envoyer : tableau de strings intitulé "product_id"
-retourne aussi un objet "contact" */
+		window.location.assign("confirm.html");
 	}
 }
 /* affiche le contenu du panier */
