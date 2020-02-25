@@ -1,10 +1,15 @@
-/* !!! necesite un test de presence dans le panier pour grisé le boutton si deja present*/
+/* !!! nécessite un test de présence dans le panier pour grisé le bouton si déjà présent*/
 
 const afficheProduit = (idArticle) => {
 	/* récupère les produits stocké dans le localStorage et affiche sur la page celui selctionné sur l'index*/
-	
-	const elements = JSON.parse(localStorage.getItem("cameras"));
-	if (elements != null) {	
+	var elements;
+	if (localStorage.getItem("cameras")) {
+		elements = JSON.parse(localStorage.getItem("cameras"));
+	} else {
+		console.error("Recuperations des articles impossible");
+		return;
+	}
+	if (elements != null && Array.isArray(elements)) {	
 		for (var article of elements) {
 			if(article._id == idArticle) {
 				let html = ""; /* variable qui contiendra tout le code html */
@@ -31,37 +36,48 @@ const afficheProduit = (idArticle) => {
 				html += ">Ajouter au panier</button><span id=\"deja-panier\"></span>";
 				html += "</div></div>";
 				document.getElementById("article").innerHTML = html;
-				/* controle la presence de l'article dans le panier */
+				/* contrôle la présence de l'article dans le panier */
 				controlPresencePanier(id);
 			}
 		}
 	} else {
-		console.error("Extraction impossible l'appareils photos du localstorage");
+		console.error("Extraction impossible des appareils photos du localstorage");
 	}
 } 
-/* si le panier existe, on verifie si le produit est deja dedans */ 
+/* si le panier existe, on vérifie si le produit est déjà dedans */ 
 const controlPresencePanier = (id) => {
 	if (localStorage.getItem("panier")) {
-		if (JSON.parse(localStorage.getItem("panier")).includes(id)) {
-			document.getElementById("bouton").disabled = true;
-			document.getElementById("deja-panier").innerHTML = "Cet article est déjà dans votre panier";
+		var panier = JSON.parse(localStorage.getItem("panier"));
+		if (panier != null && Array.isArray(panier)) {
+			if (panier.includes(id)) {
+				document.getElementById("bouton").disabled = true;
+				document.getElementById("deja-panier").innerHTML = "Cet article est déjà dans votre panier";
+			}
+		} else {
+			console.error("Lecture du contenu du panier impossible");
 		}
+
 	}
 }
 
-/* recupere l'article cliqué sur la page d'index qui est stocké dans le localStorage */
+/* récupère l'article cliqué sur la page d'index qui est stocké dans le localStorage */
 const idArticleSelectionne = localStorage.article;
 /* affiche la fiche de l'article */
 afficheProduit(idArticleSelectionne);
-/* surveillance du clic sur le bonton ajouté au panier et gestion du cas ou il y est deja present */
+/* surveillance du clic sur le bouton ajouté au panier et gestion du cas ou il y est déjà présent */
 document.getElementById("bouton").addEventListener("click", function (event) {
-	let identifiant = document.getElementById("bouton").parentElement.parentElement.getAttribute('id');
+	event.stopPropagation;
+	let identifiant;
+	if (document.getElementById("bouton").parentElement.parentElement.getAttribute('id')) {
+		identifiant = document.getElementById("bouton").parentElement.parentElement.getAttribute('id');
+	} else {
+		console.error("Recuperation de l'id de l'article impossible");
+		return;
+	}
 	var panier = [];
 	document.getElementById("bouton").disabled = true;
 	if (localStorage.panier) {
-		if (/\[/.test(localStorage.getItem("panier"))) {
-    		panier = JSON.parse(localStorage.getItem("panier"));
-		}			
+		panier = JSON.parse(localStorage.getItem("panier"));
 		if (Array.isArray(panier)) {
 			if (panier.find(element => element == identifiant)) {
 				document.getElementById("deja-panier").innerHTML = "Cet article est déjà dans votre panier.";
@@ -69,6 +85,9 @@ document.getElementById("bouton").addEventListener("click", function (event) {
 			} else {
 				panier.push(identifiant);
 			}
+		} else {
+			console.error("Contenu du panier invalide");
+			return;
 		}
 	} else {
 		panier = [identifiant]; 

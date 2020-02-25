@@ -2,8 +2,13 @@
 const afficheCommande = () => {
 	let html = "";
 	let contenuCoordonne = "";
+	var commande
 	prixTotal = 0;
-	var commande = JSON.parse(localStorage.getItem("retourCommande"));
+	if (localStorage.getItem("retourCommande")) {
+		commande = JSON.parse(localStorage.getItem("retourCommande"));
+	} else {
+		return;
+	}
 	document.getElementById("commande-id").innerHTML = commande.orderId;
 	contenuCoordonne += "<span class=\"titre-contact\">Vos coordonnées : </span>";
 	contenuCoordonne += "<div>Nom : "+commande.contact.lastName+"</div>";

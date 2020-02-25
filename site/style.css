@@ -414,6 +414,7 @@ p, h3, .prix, select{
 }
 p{
 	width: 90%;
+	overflow-wrap: anywhere;
 }
 
 /* -------- index ---------- */

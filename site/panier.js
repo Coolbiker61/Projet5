@@ -2,7 +2,7 @@ let prixTotal; /* contiendra le prix total des articles */
 const controlePanier = () => {
 	var panier = [];
 	panier = localStorage.getItem("panier");
-	/* verification de l'abscence de valeur vide et suppression de celle ci */
+	/* vérification de l’absence de valeur vide et suppression de celle ci */
 	while (panier.indexOf("\"\",") != -1) {
 		panier = panier.replace("\"\",", '');
 		localStorage.setItem("panier", panier);
@@ -50,7 +50,7 @@ const affichePanier = () => {
 					}
 				}
 			} else {
-				console.error("Extraction impossible l'appareils photos du localstorage");
+				console.error("Extraction impossible des appareils photos du localstorage");
 			}
 		html += "<div class=\"total\" id=\"total\">Total du panier : "+(prixTotal/100)+"€";
 	} else {
@@ -107,7 +107,7 @@ const surveillanceArticlePanier = () => {
 /* executer apres clique sur le bouton valider */
 const validationFormulaire = (event) => {
 	event.stopPropagation();
-	/*event.preventDefault();*/
+	event.preventDefault();
 	/* personalise le message d'erreur du champ
 	if(email.validity.typeMismatch) {
     email.setCustomValidity("J'attend un e-mail, mon cher !");
@@ -137,14 +137,14 @@ const validationFormulaire = (event) => {
 			if (this.readyState == XMLHttpRequest.DONE && this.status == 201 ) {
 				localStorage.setItem("retourCommande", this.responseText);
 			} else if (this.readyState == XMLHttpRequest.DONE && this.status != 201) {
-				console.error("erreur d'evoie du panier");
+				console.error("erreur d’envois du panier");
 			}
 		};
 		requete.open("POST", "http://localhost:3000/api/cameras/order");
 		requete.setRequestHeader("Content-Type", "application/json");
 		requete.responseType = 'text';
 		requete.send(data);
-		window.location.assign("confirm.html");
+		window.location.href = "confirm.html";
 	}
 }
 /* affiche le contenu du panier */

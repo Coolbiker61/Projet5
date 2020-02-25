@@ -22,7 +22,7 @@ const afficheProduit = () => {
 	/* récupère les produits stocké dans le localStorage et les affiches sur la page*/
 	let html = "";
 	var elements;
-	/* test de l'existance de cameras dans le localStorage*/
+	/* test de l’existence de cameras dans le localStorage*/
 	if (localStorage.getItem("cameras")) {
 		elements = JSON.parse(localStorage.getItem("cameras"));
 	} else {
@@ -65,7 +65,7 @@ const actionsClick = (event) => {
 			console.error("l'id n'appartient a aucun des articles !! ");
 		}
 	} else {
-		console.error("recupration de l'id impossible");
+		console.error("récupération de l'id impossible");
 	}
 	
 }
@@ -74,7 +74,7 @@ const actionsClick = (event) => {
 importProduit();
 /* Affichage des articles sous formes de liste */
 afficheProduit();
-/* surveille le click sur les differents produits */
+/* surveille le click sur les différents produits */
 for(var id of listeIdArticles){
 	document.getElementById(id).addEventListener("click", actionsClick.bind(event));
 }
