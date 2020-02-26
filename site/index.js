@@ -18,7 +18,7 @@ const importProduit = () => {
 		requete.send();
 	}
 }
-const afficheProduit = () => {
+const afficheProduits = () => {
 	/* récupère les produits stocké dans le localStorage et les affiches sur la page*/
 	let html = "";
 	var elements;
@@ -73,7 +73,7 @@ const actionsClick = (event) => {
 /* Importations des articles */
 importProduit();
 /* Affichage des articles sous formes de liste */
-afficheProduit();
+afficheProduits();
 /* surveille le click sur les différents produits */
 for(var id of listeIdArticles){
 	document.getElementById(id).addEventListener("click", actionsClick.bind(event));

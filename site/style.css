@@ -510,7 +510,9 @@ label, button{
 	font-size: 25px;
 }
 .panier{
-	flex-direction: row;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	        flex-direction: row;
 	-webkit-box-align: center;
 	        align-items: center;
 	padding: 0 5px;
@@ -547,17 +549,37 @@ label, button{
 	color: red;
 }
 .main-formulaire{
+	display: -webkit-box;
 	display: flex;
-	flex-direction: column;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	        flex-direction: column;
 }
 .row-formulaire, .row-formulaire-email{
+	display: -webkit-box;
 	display: flex;
-	flex-direction: column;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	        flex-direction: column;
 }
 #valider-panier{
 	padding: 5px;
 }
-
+#nom:focus:invalid{
+	border-color: red;
+}
+#prenom:focus:invalid{
+	border-color: red;
+}
+#adresse:focus:invalid{
+	border-color: red;
+}
+#ville:focus:invalid{
+	border-color: red;
+}
+#email:focus:invalid{
+	border-color: red;
+}
 /* ------- confirm --------*/
 
 .titre-contact{
@@ -569,9 +591,12 @@ label, button{
 {
 	/* ----- panier ------ */
 	.main-formulaire{
-		flex-direction: row;
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		        flex-direction: row;
 		flex-wrap: wrap;
-		justify-content: center;
+		-webkit-box-pack: center;
+		        justify-content: center;
 	}
 	.row-formulaire{
 		width: 45%;
@@ -584,7 +609,8 @@ label, button{
 		width: 250px;
 	}
 	.contact{
-		align-items: center;
+		-webkit-box-align: center;
+		        align-items: center;
 	}
 }
 @media screen and (min-width: 768px)
