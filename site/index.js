@@ -1,11 +1,12 @@
 let listeIdArticles = [];
 
-/* importe les articles depuis l'api vers le localstorage si il n'y sont pas déjà */
+/* importe les articles depuis l'api vers le localStorage si il n'y sont pas déjà */
 const importProduit = () => {
-	/* controle la presence de cameras dans le localStorage et stop la fonction si present */
+	/* contrôle la présence de cameras dans le localStorage et stop la fonction si présent */
 	if (localStorage.getItem("cameras")) {
 		return;
 	} else {
+		/* récupère de l'API le tableau des articles et le copie dans le localStorage */
 		var requete = new XMLHttpRequest();
 		requete.onreadystatechange = function () {
 			if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
@@ -18,18 +19,19 @@ const importProduit = () => {
 		requete.send();
 	}
 }
+
 const afficheProduits = () => {
 	/* récupère les produits stocké dans le localStorage et les affiches sur la page*/
 	let html = "";
 	var elements;
-	/* test de l’existence de cameras dans le localStorage*/
+	/* test de l’existence de cameras dans le localStorage et récupère le tableau qu'il contient */
 	if (localStorage.getItem("cameras")) {
 		elements = JSON.parse(localStorage.getItem("cameras"));
 	} else {
 		console.error("chargement des cameras impossible");
 		return;
 	}
-	/* ajoute tout les articles au html*/
+	/* verifie que le tableau récupérer n'est pas null et ajoute tout les articles au DOM*/
 	if (elements != null) {
 		html += "<div class=\"categorie\"><span class=\"titre-cate\">";
 		html += "Nos appareils photos";
@@ -50,15 +52,16 @@ const afficheProduits = () => {
 		}
 		html += "</div>";
 	} else {
-		console.error("Extraction impossible des appareils photos du localstorage");
+		console.error("Extraction impossible des appareils photos du localStorage");
 	}
 	document.getElementById("produits").innerHTML = html;
 } 
-/* action lors d'un clic */
+/* lors d'un clic, verifie que l'id qui a déclenché le clic fait parti des articles */
 const actionsClick = (event) => {
 	if (event.target.parentElement.parentElement.getAttribute('id')) {
 		var identifiant = event.target.parentElement.parentElement.getAttribute('id');
 		event.stopPropagation();
+		/* définie la clé article du localStorage avec la valeur de l'id */
 		if (listeIdArticles.includes(identifiant)) {
 			localStorage.article = identifiant;
 		} else {
@@ -74,7 +77,7 @@ const actionsClick = (event) => {
 importProduit();
 /* Affichage des articles sous formes de liste */
 afficheProduits();
-/* surveille le click sur les différents produits */
+/* surveille le click sur les différents articles */
 for(var id of listeIdArticles){
 	document.getElementById(id).addEventListener("click", actionsClick.bind(event));
 }

@@ -1,31 +1,19 @@
 let prixTotal; /* contiendra le prix total des articles */
-const controlePanier = () => {
-	var panier = [];
-	panier = localStorage.getItem("panier");
-	/* vérification de l’absence de valeur vide et suppression de celle ci */
-	while (panier.indexOf("\"\",") != -1) {
-		panier = panier.replace("\"\",", '');
-		localStorage.setItem("panier", panier);
-	}
-	while (panier.indexOf(",\"\"") != -1) {
-		panier = panier.replace(",\"\"", '');
-		localStorage.setItem("panier", panier);
-	}
-}
-
 
 const affichePanier = () => {
 	/* récupère les produits stocké dans le localStorage et affiche sur la page ceux dans le panier*/
 	let html = "";
 	var panier = [];
 	prixTotal = 0;
+	/* teste l'existence du panier et si c'est un tableau*/
 	if (localStorage.panier) {
-		controlePanier();
 		if (/\[/.test(localStorage.getItem("panier"))) {
 			panier = JSON.parse(localStorage.getItem("panier"));
 		}	
+			/* recupere le tableau d'article et verifie qu'il n'est pas null */
 			const elements = JSON.parse(localStorage.getItem("cameras"));
 			if (elements != null) {	
+				/* pour chaque article on verifie leur existance dans la panier */
 				for (var article of elements) {
 					if (Array.isArray(panier)) {
 						for (let objet of panier) {
@@ -36,7 +24,7 @@ const affichePanier = () => {
 								prixTotal += prix;
 								prix /= 100;
 								let id = article._id;
-								
+								/* ajout du code html de  l'article avec ces details dans la variable html */
 								html += "<div class=\"objet panier\"  id=\""+id+"\">";
 								html += "<img class=\"img-panier\" src=\""+image+"\">";
 								html += "<div class=\"details-panier\"><h3>"+nom+"</h3>";
@@ -56,20 +44,22 @@ const affichePanier = () => {
 	} else {
 		html += "<div class=\"vide\">Votre panier est vide</div>"
 	}
-
-	
+	/* ajout du html au DOM */
 	document.getElementById("contenu").innerHTML = html;
 } 
 
+/* recupére l'id de l'article qui a déclanché l'event et le supprime du panier */
 const supprimerArticlePanier = (event) => {
 	var identifiant = event.target.parentElement.parentElement.getAttribute('id');
 	var panier = [];
 	event.stopPropagation();
+	/* verifie que le panier exitse et qu'il est bien un tableau */
 	if (localStorage.panier) {
 		if (/\[/.test(localStorage.getItem("panier"))) {
     		panier = JSON.parse(localStorage.getItem("panier"));
 		}
 		if (Array.isArray(panier)) {
+			/* verifie que l'id de l'article est bien dans le panier et l'enléve */
 			if (panier.indexOf(identifiant) != -1) {
 				panier.splice(panier.indexOf(identifiant), 1);
 				if (panier.length == 0) {
@@ -85,11 +75,11 @@ const supprimerArticlePanier = (event) => {
 			return 0;
 		}
 	}
-	/* actualise la liste des articles */
+	/* actualise la liste des articles*/
 	affichePanier();
-	surveillanceArticlePanier();
 }
 
+/* Ajoute l'ecoute des clic sur la ligne "supprimer du panier" de chaque article si le panier existe et est un tableau */
 const surveillanceArticlePanier = () => {
 	if (localStorage.getItem("panier")) {
 		if (/\[/.test(localStorage.getItem("panier"))) {
@@ -98,27 +88,23 @@ const surveillanceArticlePanier = () => {
 				document.getElementById("bouton"+id).addEventListener("click", supprimerArticlePanier.bind(event));
 			}
 		} else {
-			return 0;
+			return;
 		}
 	} else {
-		return 0;
+		return;
 	}
 }
 /* executer apres clique sur le bouton valider */
 const validationFormulaire = (event) => {
+	/* arrête la propagation du clic et désactive son fonctionnement par défaut */
 	event.stopPropagation();
 	event.preventDefault();
-	/* personalise le message d'erreur du champ
-	if(email.validity.typeMismatch) {
-    email.setCustomValidity("J'attend un e-mail, mon cher !");
-  } else {
-    email.setCustomValidity("");
-  }  https://developer.mozilla.org/fr/docs/Web/Guide/HTML/Formulaires/Validation_donnees_formulaire
-  */
+	/* teste la presence d'un panier non vide */
 	if (localStorage.getItem("panier") == null) {
 		alert("Vous ne pouvez valider un panier vide !");
 		return;
 	} else {
+		/* creation de l'objet contact */
 		const contact = {
 			firstName: document.getElementById("prenom").value,
 			lastName: document.getElementById("nom").value,
@@ -126,13 +112,17 @@ const validationFormulaire = (event) => {
 			city: document.getElementById("ville").value,
 			email: document.getElementById("email").value
 		}
+		/* recuperation et convertion du contenu du panier */
 		const panier = JSON.parse(localStorage.getItem("panier"));
+		/* creation d'un tablau contenant l'objet contact et le tableau panier */
 		var data = {
 			contact: contact,
 			products: panier
 		};
+		/* convertion du tableau en JSON */
 		data = JSON.stringify(data);
 		var requete = new XMLHttpRequest();
+		/* ecoute des changement d'état de l'envoie */
 		requete.onreadystatechange = function () {
 			if (this.readyState == XMLHttpRequest.DONE && this.status == 201 ) {
 				localStorage.setItem("retourCommande", this.responseText);
@@ -144,6 +134,7 @@ const validationFormulaire = (event) => {
 		requete.setRequestHeader("Content-Type", "application/json");
 		requete.responseType = 'text';
 		requete.send(data);
+		/* redirige l'utilisateur vers la page confirm.html */
 		window.location.href = "confirm.html";
 	}
 }
@@ -154,6 +145,35 @@ surveillanceArticlePanier();
 /* surveillance du bouton valider du formulaire */
 document.getElementById("valider-panier").addEventListener("click", function (event) {
  	validationFormulaire(event);
+});
+
+/* verifie si le champ du formaulaire est valide et ajoute la class invalide le cas échéant sinon l'enléve */
+const verifieValide = (elementForm) => {
+	if (elementForm.validity.valid == false){
+		if(elementForm.classList.contains("invalide") == false) {
+			elementForm.classList.add("invalide");
+		}
+	} else {
+		if(elementForm.classList.contains("invalide") == true) {
+			elementForm.classList.remove("invalide");
+		}
+	}
+}
+/* surveille la modification des champs d formaulaire et declanche la fonction verifieValide() */
+document.getElementById("nom").addEventListener('input', function (event) {
+	verifieValide(event.target);
+});
+document.getElementById("prenom").addEventListener('input', function (event) {
+	verifieValide(event.target);
+});
+document.getElementById("adresse").addEventListener('input', function (event) {
+	verifieValide(event.target);
+});
+document.getElementById("ville").addEventListener('input', function (event) {
+	verifieValide(event.target);
+});
+document.getElementById("email").addEventListener('input', function (event) {
+	verifieValide(event.target);
 });
 
 

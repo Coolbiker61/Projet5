@@ -565,19 +565,7 @@ label, button{
 #valider-panier{
 	padding: 5px;
 }
-#nom:focus:invalid{
-	border-color: red;
-}
-#prenom:focus:invalid{
-	border-color: red;
-}
-#adresse:focus:invalid{
-	border-color: red;
-}
-#ville:focus:invalid{
-	border-color: red;
-}
-#email:focus:invalid{
+.invalide{
 	border-color: red;
 }
 /* ------- confirm --------*/
