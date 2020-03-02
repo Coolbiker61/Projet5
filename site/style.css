@@ -531,6 +531,7 @@ label, button{
     height: 45%;
     border: 1px solid #9C7693;
     margin: 10px 0;
+    max-width: 245px;
 }
 #commande-coordonnées, .contact{
 	background-color: #C6E5FA;
