@@ -4,6 +4,8 @@ let listeIdArticles = [];
 const importProduit = () => {
 	/* contrôle la présence de cameras dans le localStorage et stop la fonction si présent */
 	if (localStorage.getItem("cameras")) {
+		/* Affichage des articles sous formes de liste */
+		affichage();
 		return;
 	} else {
 		/* récupère de l'API le tableau des articles et le copie dans le localStorage */
@@ -11,6 +13,7 @@ const importProduit = () => {
 		requete.onreadystatechange = function () {
 			if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
 				localStorage.setItem("cameras", this.responseText);
+				affichage();
 			} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
 				console.error("erreur d'importation du produit cameras vintages");
 			}
@@ -45,7 +48,7 @@ const afficheProduits = () => {
 			let id = article._id;
 			listeIdArticles.push(id);
 
-			html += "<a href=\"./produit.html\" id=\""+id+"\"><div class=\"objet\">";
+			html += "<a href=\"#\" id=\""+id+"\"><div class=\"objet\">";
 			html += "<img class=\"img-produit\" src=\""+image+"\">";
 			html += "<h3>"+nom+"</h3>";
 			html += "</div></a>";
@@ -61,9 +64,12 @@ const actionsClick = (event) => {
 	if (event.target.parentElement.parentElement.getAttribute('id')) {
 		var identifiant = event.target.parentElement.parentElement.getAttribute('id');
 		event.stopPropagation();
+		event.preventDefault();
 		/* définie la clé article du localStorage avec la valeur de l'id */
 		if (listeIdArticles.includes(identifiant)) {
 			localStorage.article = identifiant;
+			/* redirige l'utilisateur vers la page produit.html */
+			window.location.href = "produit.html";
 		} else {
 			console.error("l'id n'appartient a aucun des articles !! ");
 		}
@@ -73,11 +79,17 @@ const actionsClick = (event) => {
 	
 }
 
-/* Importations des articles */
-importProduit();
-/* Affichage des articles sous formes de liste */
-afficheProduits();
-/* surveille le clic sur les différents articles */
-for(var id of listeIdArticles){
-	document.getElementById(id).addEventListener("click", actionsClick.bind(event));
+const affichage = () => {
+
+	/* Affichage des articles sous formes de liste */
+	afficheProduits();
+	
+	/* surveille le clic sur les différents articles */
+	for(var id of listeIdArticles){
+		document.getElementById(id).addEventListener("click", actionsClick.bind(event));
+	}
 }
+
+/* Importations des articles et lancement de l'affichage et des écoutes*/
+importProduit();
+

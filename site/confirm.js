@@ -4,7 +4,7 @@ const afficheCommande = () => {
 	let contenuCoordonne = "";
 	var commande
 	prixTotal = 0;
-	/* Vérifie l’existence de retourCommande dans le localStorage et récupère son contenu puis supprime le panier*/
+	/* Vérifie l'existence de retourCommande dans le localStorage et récupère son contenu puis supprime le panier*/
 	if (localStorage.getItem("retourCommande")) {
 		commande = JSON.parse(localStorage.getItem("retourCommande"));
 		localStorage.removeItem("panier");
@@ -21,7 +21,7 @@ const afficheCommande = () => {
 	contenuCoordonne += "<div>Ville : "+commande.contact.city+"</div>";
 	contenuCoordonne += "<div>Email : "+commande.contact.email+"</div>";
 	document.getElementById("commande-coordonnées").innerHTML = contenuCoordonne;
-	/* pour chaque article de la commande, les balises html et les détails de l'article sont ajouté a la variable html */
+	/* pour chaque article de la commande, les balises html et les details de l'article sont ajouté a la variable html */
 	for (let article of commande.products) {
 		let image = article.imageUrl;
 		let nom = article.name;

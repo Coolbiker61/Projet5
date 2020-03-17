@@ -29,7 +29,7 @@ const affichePanier = () => {
 								html += "<img class=\"img-panier\" src=\""+image+"\">";
 								html += "<div class=\"details-panier\"><h3>"+nom+"</h3>";
 								html += "<div class=\"prix\">Prix : "+prix+"€</div>";
-								html += "<a class=\"bouton\" id=\"bouton"+id+"\" type=\"button\"><img src=\"./img/croix.svg\" class=\"img-supprimer\">Supprimer du panier</a>";
+								html += "<a class=\"bouton\" id=\"bouton"+id+"\" type=\"button\">Supprimer du panier</a>";
 								html += "</div></div>";
 							}
 						}						
@@ -59,7 +59,7 @@ const supprimerArticlePanier = (event) => {
     		panier = JSON.parse(localStorage.getItem("panier"));
 		}
 		if (Array.isArray(panier)) {
-			/* vérifie que l'id de l'article est bien dans le panier et l’enlève */
+			/* vérifie que l'id de l'article est bien dans le panier et l'enlève */
 			if (panier.indexOf(identifiant) != -1) {
 				panier.splice(panier.indexOf(identifiant), 1);
 				if (panier.length == 0) {
@@ -79,7 +79,7 @@ const supprimerArticlePanier = (event) => {
 	affichePanier();
 }
 
-/* Ajoute l’écoute des clic sur la ligne "supprimer du panier" de chaque article si le panier existe et est un tableau */
+/* Ajoute l'écoute des clic sur la ligne "supprimer du panier" de chaque article si le panier existe et est un tableau */
 const surveillanceArticlePanier = () => {
 	if (localStorage.getItem("panier")) {
 		if (/\[/.test(localStorage.getItem("panier"))) {
@@ -96,47 +96,60 @@ const surveillanceArticlePanier = () => {
 }
 /* exécuter après clique sur le bouton valider */
 const validationFormulaire = (event) => {
-	/* arrête la propagation du clic et désactive son fonctionnement par défaut */
-	event.stopPropagation();
-	event.preventDefault();
-	/* teste la présence d'un panier non vide */
-	if (localStorage.getItem("panier") == null) {
-		alert("Vous ne pouvez valider un panier vide !");
-		return;
-	} else {
-		/* création de l'objet contact */
-		const contact = {
-			firstName: document.getElementById("prenom").value,
-			lastName: document.getElementById("nom").value,
-			address: document.getElementById("adresse").value,
-			city: document.getElementById("ville").value,
-			email: document.getElementById("email").value
-		}
-		/* récupération et conversion du contenu du panier */
-		const panier = JSON.parse(localStorage.getItem("panier"));
-		/* création d'un tableau contenant l'objet contact et le tableau panier */
-		var data = {
-			contact: contact,
-			products: panier
-		};
-		/* conversion du tableau en JSON */
-		data = JSON.stringify(data);
-		var requete = new XMLHttpRequest();
-		/* écoute des changement d'état de l'envoie */
-		requete.onreadystatechange = function () {
-			if (this.readyState == XMLHttpRequest.DONE && this.status == 201 ) {
-				localStorage.setItem("retourCommande", this.responseText);
-			} else if (this.readyState == XMLHttpRequest.DONE && this.status != 201) {
-				console.error("erreur d’envois du panier");
+	if (document.getElementById("prenom").value !== "" && document.getElementById("prenom").validity.valid &&
+	document.getElementById("nom").value !== "" && document.getElementById("nom").validity.valid &&
+	document.getElementById("adresse").value !== "" && document.getElementById("adresse").validity.valid &&
+	document.getElementById("ville").value !== "" && document.getElementById("ville").validity.valid &&
+	document.getElementById("email").value !== "" && document.getElementById("email").validity.valid ) {
+		/* arrête la propagation du clic et désactive son fonctionnement par défaut */
+		event.stopPropagation();
+		event.preventDefault();
+		/* teste la présence d'un panier non vide */
+		if (localStorage.getItem("panier") == null) {
+			alert("Vous ne pouvez valider un panier vide !");
+			return;
+		} else {
+			/* création de l'objet contact */
+			const contact = {
+				firstName: document.getElementById("prenom").value,
+				lastName: document.getElementById("nom").value,
+				address: document.getElementById("adresse").value,
+				city: document.getElementById("ville").value,
+				email: document.getElementById("email").value
 			}
-		};
-		requete.open("POST", "http://localhost:3000/api/cameras/order");
-		requete.setRequestHeader("Content-Type", "application/json");
-		requete.responseType = 'text';
-		requete.send(data);
-		/* redirige l'utilisateur vers la page confirm.html */
-		window.location.href = "confirm.html";
+			/* récupération et conversion du contenu du panier */
+			const panier = JSON.parse(localStorage.getItem("panier"));
+			/* creation d'un tableau contenant l'objet contact et le tableau panier */
+			var data = {
+				contact: contact,
+				products: panier
+			};
+			/* conversion du tableau en JSON */
+			data = JSON.stringify(data);
+			var requete = new XMLHttpRequest();
+			/* écoute des changement d'état de l'envoie */
+			requete.onreadystatechange = function () {
+				if (this.readyState == XMLHttpRequest.DONE && this.status == 201 ) {
+					localStorage.setItem("retourCommande", this.responseText);
+					/* redirige l'utilisateur vers la page confirm.html */
+					window.location.href = "confirm.html";
+				} else if (this.readyState == XMLHttpRequest.DONE && this.status != 201) {
+					console.error("erreur d’envois du panier");
+					return;
+				}
+			};
+			requete.open("POST", "http://localhost:3000/api/cameras/order");
+			requete.setRequestHeader("Content-Type", "application/json");
+			requete.responseType = 'text';
+			requete.send(data);
+			
+		}
+
+	} else {
+		return;
 	}
+
+	
 }
 /* affiche le contenu du panier */
 affichePanier();
@@ -147,7 +160,7 @@ document.getElementById("valider-panier").addEventListener("click", function (ev
  	validationFormulaire(event);
 });
 
-/* vérifie si le champ du formulaire est valide et ajoute la class invalide le cas échéant sinon l’enlève */
+/* vérifie si le champ du formulaire est valide et ajoute la class invalide le cas échéant sinon l'enlève */
 const verifieValide = (elementForm) => {
 	if (elementForm.validity.valid == false){
 		if(elementForm.classList.contains("invalide") == false) {
