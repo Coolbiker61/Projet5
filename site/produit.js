@@ -2,14 +2,14 @@
 const afficheProduit = (idArticle) => {
 	/* récupère les produits stocké dans le localStorage et affiche sur la page celui sélectionné sur l'index*/
 	var elements;
-	/* verifie l'existence de cameras dans le localStorage et en récupère le tableau qu'il contient */
+	/* vérifie l'existence de cameras dans le localStorage et en récupère le tableau qu'il contient */
 	if (localStorage.getItem("cameras")) {
 		elements = JSON.parse(localStorage.getItem("cameras"));
 	} else {
 		console.error("Récupérations des articles impossible");
 		return;
 	}
-	/* verifie que le contenu récupérer du localStorage est bien un tableau et qu'il n'est pas null */
+	/* vérifie que le contenu récupérer du localStorage est bien un tableau et qu'il n'est pas null */
 	if (elements != null && Array.isArray(elements)) {	
 		/* compare l'idArticle avec l'id de tous les articles */
 		for (var article of elements) {

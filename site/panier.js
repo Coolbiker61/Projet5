@@ -10,10 +10,10 @@ const affichePanier = () => {
 		if (/\[/.test(localStorage.getItem("panier"))) {
 			panier = JSON.parse(localStorage.getItem("panier"));
 		}	
-			/* recupere le tableau d'article et verifie qu'il n'est pas null */
+			/* récupère le tableau d'article et vérifie qu'il n'est pas null */
 			const elements = JSON.parse(localStorage.getItem("cameras"));
 			if (elements != null) {	
-				/* pour chaque article on verifie leur existance dans la panier */
+				/* pour chaque article on vérifie leur existence dans la panier */
 				for (var article of elements) {
 					if (Array.isArray(panier)) {
 						for (let objet of panier) {
@@ -24,7 +24,7 @@ const affichePanier = () => {
 								prixTotal += prix;
 								prix /= 100;
 								let id = article._id;
-								/* ajout du code html de  l'article avec ces details dans la variable html */
+								/* ajout du code html de  l'article avec ces détails dans la variable html */
 								html += "<div class=\"objet panier\"  id=\""+id+"\">";
 								html += "<img class=\"img-panier\" src=\""+image+"\">";
 								html += "<div class=\"details-panier\"><h3>"+nom+"</h3>";
@@ -48,18 +48,18 @@ const affichePanier = () => {
 	document.getElementById("contenu").innerHTML = html;
 } 
 
-/* recupére l'id de l'article qui a déclanché l'event et le supprime du panier */
+/* récupère l'id de l'article qui a déclenché l'event et le supprime du panier */
 const supprimerArticlePanier = (event) => {
 	var identifiant = event.target.parentElement.parentElement.getAttribute('id');
 	var panier = [];
 	event.stopPropagation();
-	/* verifie que le panier exitse et qu'il est bien un tableau */
+	/* vérifie que le panier existe et qu'il est bien un tableau */
 	if (localStorage.panier) {
 		if (/\[/.test(localStorage.getItem("panier"))) {
     		panier = JSON.parse(localStorage.getItem("panier"));
 		}
 		if (Array.isArray(panier)) {
-			/* verifie que l'id de l'article est bien dans le panier et l'enléve */
+			/* vérifie que l'id de l'article est bien dans le panier et l’enlève */
 			if (panier.indexOf(identifiant) != -1) {
 				panier.splice(panier.indexOf(identifiant), 1);
 				if (panier.length == 0) {
@@ -79,7 +79,7 @@ const supprimerArticlePanier = (event) => {
 	affichePanier();
 }
 
-/* Ajoute l'ecoute des clic sur la ligne "supprimer du panier" de chaque article si le panier existe et est un tableau */
+/* Ajoute l’écoute des clic sur la ligne "supprimer du panier" de chaque article si le panier existe et est un tableau */
 const surveillanceArticlePanier = () => {
 	if (localStorage.getItem("panier")) {
 		if (/\[/.test(localStorage.getItem("panier"))) {
@@ -94,17 +94,17 @@ const surveillanceArticlePanier = () => {
 		return;
 	}
 }
-/* executer apres clique sur le bouton valider */
+/* exécuter après clique sur le bouton valider */
 const validationFormulaire = (event) => {
 	/* arrête la propagation du clic et désactive son fonctionnement par défaut */
 	event.stopPropagation();
 	event.preventDefault();
-	/* teste la presence d'un panier non vide */
+	/* teste la présence d'un panier non vide */
 	if (localStorage.getItem("panier") == null) {
 		alert("Vous ne pouvez valider un panier vide !");
 		return;
 	} else {
-		/* creation de l'objet contact */
+		/* création de l'objet contact */
 		const contact = {
 			firstName: document.getElementById("prenom").value,
 			lastName: document.getElementById("nom").value,
@@ -112,17 +112,17 @@ const validationFormulaire = (event) => {
 			city: document.getElementById("ville").value,
 			email: document.getElementById("email").value
 		}
-		/* recuperation et convertion du contenu du panier */
+		/* récupération et conversion du contenu du panier */
 		const panier = JSON.parse(localStorage.getItem("panier"));
-		/* creation d'un tablau contenant l'objet contact et le tableau panier */
+		/* création d'un tableau contenant l'objet contact et le tableau panier */
 		var data = {
 			contact: contact,
 			products: panier
 		};
-		/* convertion du tableau en JSON */
+		/* conversion du tableau en JSON */
 		data = JSON.stringify(data);
 		var requete = new XMLHttpRequest();
-		/* ecoute des changement d'état de l'envoie */
+		/* écoute des changement d'état de l'envoie */
 		requete.onreadystatechange = function () {
 			if (this.readyState == XMLHttpRequest.DONE && this.status == 201 ) {
 				localStorage.setItem("retourCommande", this.responseText);
@@ -147,7 +147,7 @@ document.getElementById("valider-panier").addEventListener("click", function (ev
  	validationFormulaire(event);
 });
 
-/* verifie si le champ du formaulaire est valide et ajoute la class invalide le cas échéant sinon l'enléve */
+/* vérifie si le champ du formulaire est valide et ajoute la class invalide le cas échéant sinon l’enlève */
 const verifieValide = (elementForm) => {
 	if (elementForm.validity.valid == false){
 		if(elementForm.classList.contains("invalide") == false) {
@@ -159,7 +159,7 @@ const verifieValide = (elementForm) => {
 		}
 	}
 }
-/* surveille la modification des champs d formaulaire et declanche la fonction verifieValide() */
+/* surveille la modification des champs du formulaire et déclenche la fonction verifieValide() */
 document.getElementById("nom").addEventListener('input', function (event) {
 	verifieValide(event.target);
 });

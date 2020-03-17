@@ -10,7 +10,7 @@ const importProduit = () => {
 		var requete = new XMLHttpRequest();
 		requete.onreadystatechange = function () {
 			if (this.readyState == XMLHttpRequest.DONE && this.status == 200 ) {
-				localStorage.setItem("cameras") = this.responseText;
+				localStorage.setItem("cameras", this.responseText);
 			} else if (this.readyState == XMLHttpRequest.DONE && this.status != 200) {
 				console.error("erreur d'importation du produit cameras vintages");
 			}
@@ -31,7 +31,7 @@ const afficheProduits = () => {
 		console.error("chargement des cameras impossible");
 		return;
 	}
-	/* verifie que le tableau récupérer n'est pas null et ajoute tout les articles au DOM*/
+	/* vérifie que le tableau récupérer n'est pas null et ajoute tout les articles au DOM*/
 	if (elements != null) {
 		html += "<div class=\"categorie\"><span class=\"titre-cate\">";
 		html += "Nos appareils photos";
@@ -56,7 +56,7 @@ const afficheProduits = () => {
 	}
 	document.getElementById("produits").innerHTML = html;
 } 
-/* lors d'un clic, verifie que l'id qui a déclenché le clic fait parti des articles */
+/* lors d'un clic, vérifie que l'id qui a déclenché le clic fait parti des articles */
 const actionsClick = (event) => {
 	if (event.target.parentElement.parentElement.getAttribute('id')) {
 		var identifiant = event.target.parentElement.parentElement.getAttribute('id');
@@ -77,7 +77,7 @@ const actionsClick = (event) => {
 importProduit();
 /* Affichage des articles sous formes de liste */
 afficheProduits();
-/* surveille le click sur les différents articles */
+/* surveille le clic sur les différents articles */
 for(var id of listeIdArticles){
 	document.getElementById(id).addEventListener("click", actionsClick.bind(event));
 }
