@@ -67,7 +67,7 @@ const actionsClick = (event) => {
 		event.preventDefault();
 		/* définie la clé article du localStorage avec la valeur de l'id */
 		if (listeIdArticles.includes(identifiant)) {
-			localStorage.article = identifiant;
+			localStorage.setItem("article", identifiant);
 			/* redirige l'utilisateur vers la page produit.html */
 			window.location.href = "produit.html";
 		} else {
